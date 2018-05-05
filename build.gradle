@@ -1,0 +1,42 @@
+apply plugin: 'cpp'
+
+model {
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    toolChains {
+        gcc(Gcc) {
+            path "/usr/local/bin"
+            eachPlatform {
+                cCompiler.executable = "gcc-8.1.0"
+                cppCompiler.executable = "g++-8.1.0"
+                linker.executable = "g++-8.1.0"
+                staticLibArchiver.executable = "gcc-ar-8.1.0"
+            }
+        }
+    }
+
+    binaries {
+        all {
+            if (toolChain in Gcc) {
+                cppCompiler.args '-Wall', '-std=c++17'
+            }
+        }
+    }
+
+    components {
+        echelon_unicode(NativeLibrarySpec) {
+            targetPlatform "x64"
+        }
+        command_line(NativeExecutableSpec) {
+            targetPlatform "x64"
+
+            binaries.all {
+                lib library: "echelon_unicode", linkage: 'static'
+            }
+        }
+    }
+}
