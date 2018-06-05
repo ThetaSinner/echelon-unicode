@@ -24,6 +24,9 @@ model {
             if (toolChain in Gcc) {
                 cppCompiler.args '-Wall', '-std=c++17'
             }
+            else if (toolChain in VisualCpp) {
+                cppCompiler.args '/W3', '/std:c++latest'//, '/DECHELON_DEBUG'
+            }
         }
     }
 
